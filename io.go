@@ -45,6 +45,19 @@ func (io *IO) NextInt() int {
 	return int(io.NextInt64())
 }
 
+func (io *IO) NextString() string {
+	return io.sc.Text()
+}
+
+func (io *IO) NextFloat64() float64 {
+	io.scan()
+	val, err := strconv.ParseFloat(io.sc.Text(), 64)
+	if err != nil {
+		panic(err)
+	}
+	return val
+}
+
 func (io *IO) scan() {
 	if !io.sc.Scan() {
 		panic("")
@@ -55,7 +68,6 @@ func (io *IO) Flush() error {
 	return io.w.Flush()
 }
 
-func (io *IO) Println(a ...interface{}) error {
-	_, err := io.w.WriteString(fmt.Sprintln(a...))
-	return err
+func (io *IO) Println(a ...interface{}) {
+	fmt.Fprintln(io.w, a...)
 }
